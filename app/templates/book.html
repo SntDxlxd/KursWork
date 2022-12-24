@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<tr>
+    <td>
+        {% if  current_user.is_anonymous %}
+        <h1>{{ book.name }}</h1>
+        <p>Описание:</p>
+        <p>
+            {% for description in descriptions %}
+                {{description}}
+            {% endfor %}<br>
+        </p>
+        <a href="{{ url_for('book_chapters', book_id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">Список глав</button></a>
+        {% else %}
+        {% if  (current_user.role == "auth") and (current_user.id == auth_id) %}
+        <h1>{{ book.name }}</h1>
+        <p>Описание:</p>
+        <p> 
+            {% for description in descriptions %}
+                {{description}}
+            {% endfor %}<br>
+        </p>
+        <a href="{{ url_for('chapter_upload', book_id=book.id)}}"><button type="button" class="btn btn-outline-primary me-2">Загрузить главу</button></a> <br><br>
+        <a href="{{ url_for('book_chapters', book_id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">Список глав</button></a> 
+        {% else %}
+        <h1>{{ book.name }}</h1>
+        <p>Описание:</p>
+            <p>
+                {% for description in descriptions %}
+                    {{description}}
+                {% endfor %}
+            </p><br>
+        <a href="{{ url_for('book_chapters', book_id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">Список глав</button></a> <br><br>
+            {% if mark %}
+                <a href="{{url_for('ch_book', id=mark)}}"><button type="button" class="btn btn-outline-primary me-2">Перейти по закладке</button></a>
+            {% endif %}
+        {% endif %}
+        {% endif %}
+    </td>
+</tr>
+{% endblock %}
