@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <h1>
+        <p align="center">ДОБРО ПОЖАЛОВАТЬ - {{ user.login }}!</p>
+    </h1>
+    <hr>
+    <p>Ваш id - {{ user.id }}</p>
+    <h2>Ваши книги:</h2>
+    </hr>
+    <table class="table table-hover">
+    {% if books %}
+        {% for book in books %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('book', id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">{{ book.name }}</button></a> <br><br>
+                    <a href="{{ url_for('chapter_upload', book_id=book.id)}}"><button type="button" class="btn btn-outline-primary me-2">Загрузить главу</button></a> <br><br>
+                    <a href="{{ url_for('book_chapters', book_id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">Список глав</button></a> 
+                </td>
+            </tr>
+        {% endfor %}
+    {%else%} 
+    <h3> Вы ничего не загружали 😭 </h3>
+    {% endif %}
+    </table>
+{% endblock %}

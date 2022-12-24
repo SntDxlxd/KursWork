@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <hr>
+    {% if (current_user.role == "auth") %}
+    <h1>Каталог ваших книг:</h1>
+    {% else %}
+    <h1>Каталог книг:</h1>
+    {% endif %}
+    {% if books %}
+    </hr>
+    <table class="table table-hover">
+        {% for book in books %}
+            <tr>
+                <td>
+                    {% if  current_user.is_anonymous %}
+                    <a href="{{ url_for('book', id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">{{ book.name }}</button></a> <br><br>
+                    <a href="{{ url_for('book_chapters', book_id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">Список глав</button></a>
+                    {% else %}
+                    {% if  (current_user.role == "auth") and (current_user.id == auth_id) %}
+                    <a href="{{ url_for('book', id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">{{ book.name }}</button></a> <br><br>
+                    <a href="{{ url_for('chapter_upload', book_id=book.id)}}"><button type="button" class="btn btn-outline-primary me-2">Загрузить главу</button></a> <br><br>
+                    <a href="{{ url_for('book_chapters', book_id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">Список глав</button></a> 
+                    {% else %}
+                    <a href="{{ url_for('book', id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">{{ book.name }}</button></a> <br><br>
+                    <a href="{{ url_for('book_chapters', book_id=book.id) }}"><button type="button" class="btn btn-outline-primary me-2">Список глав</button></a>
+                    {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {%else%} 
+    <p> Вы ничего не загружали 😭 </p>
+    {% endif %}
+{% endblock %}
